@@ -49,6 +49,8 @@ export const PRIZES = {
     title: 'Haftanın birincisi ol,\nJBL Charge 5 kazan',
     sponsor: 'Ödül sponsoru: yakında açıklanacak',
     image: '',
+    // Tam banner görseli (varsa metin düzeni yerine bu gösterilir):
+    banner: 'assets/promo/haftalik-odul.png',
   },
   season: {
     enabled: true,

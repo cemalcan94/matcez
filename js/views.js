@@ -77,7 +77,13 @@ export async function renderHome(el) {
 
     el.innerHTML += `
       ${PRIZES.weekly.enabled ? `
-      <a class="prize-banner" href="#/kurallar">
+      ${PRIZES.weekly.banner ? `
+      <a class="prize-banner-full" href="#/kurallar">
+        <img src="${esc(PRIZES.weekly.banner)}" alt="${esc(PRIZES.weekly.eyebrow)}: ${esc(PRIZES.weekly.title).replace(/\n/g, ' ')}"
+             onerror="this.closest('.prize-banner-full').style.display='none';document.getElementById('prize-fallback').style.display='flex'">
+      </a>` : ''}
+      <a class="prize-banner" id="prize-fallback" href="#/kurallar"
+         ${PRIZES.weekly.banner ? 'style="display:none"' : ''}>
         <div class="pb-txt">
           <div class="pb-eyebrow">${esc(PRIZES.weekly.eyebrow)}</div>
           <div class="pb-title">${esc(PRIZES.weekly.title).replace(/\n/g, '<br>')}</div>

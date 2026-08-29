@@ -56,10 +56,10 @@ button { font-family: inherit; }
   left: 50%; transform: translateX(-50%);
   bottom: 0;
   width: min(100vw, var(--appw));
-  height: calc(var(--tabbar-h) + var(--tabbar-gap) + 56px + env(safe-area-inset-bottom, 0px));
+  height: calc(var(--tabbar-h) + var(--tabbar-gap) + 16px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(to top,
-    var(--bg) 0,
-    var(--bg) calc(100% - 56px),
+    rgba(250, 251, 245, .88) 0,
+    rgba(250, 251, 245, .55) 55%,
     rgba(250, 251, 245, 0) 100%);
   pointer-events: none;
   z-index: 58;
@@ -252,6 +252,15 @@ tr.hl td { background: #F8FDE4; }
 .hero-cell .v { font-family: var(--font-display); font-size: 21px; font-weight: 800; letter-spacing: -0.01em; }
 .hero-cell .v.lime { color: var(--accent); }
 .hero-divider { width: 1px; background: #262B20; }
+
+/* Tam görselli ödül banner'ı */
+.prize-banner-full {
+  display: block; border-radius: var(--radius); overflow: hidden;
+  margin-bottom: 8px; line-height: 0;
+  box-shadow: 0 2px 10px rgba(14,16,11,.10);
+}
+.prize-banner-full img { width: 100%; height: auto; display: block; }
+.prize-banner-full:active { transform: scale(.99); }
 
 /* ---------- Ödül banner'ı (siyah güç bloğu) ---------- */
 .prize-banner {
