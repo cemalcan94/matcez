@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Matcez — KKTC Süper Lig Fantazi Ligi</title>
+  <meta name="description" content="Matcez: KKTC Süper Ligi için fantazi futbol oyunu. Kadronu kur, arkadaşlarınla yarış.">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='512' height='512' rx='112' fill='%23000000'/%3E%3Cg transform='translate(56,56) scale(4)'%3E%3Cpath d='M6,82 V18 H33 L50,44 L67,18 H94 V82 H71 V48 L50,72 L29,48 V82 Z' fill='%23C6FF33'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Archivo:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/logo/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Matcez">
+</head>
+<body>
+  <div class="app">
+    <header class="appbar">
+      <a class="appbar-brand" href="#/" aria-label="Matcez">
+        <svg width="30" height="30" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="26" fill="#0E100B"/><g transform="translate(11,11) scale(0.78)"><path d="M6,82 V18 H33 L50,44 L67,18 H94 V82 H71 V48 L50,72 L29,48 V82 Z" fill="#C6FF33"/></g></svg>
+        <span class="brand-text">Matcez</span>
+      </a>
+      <div class="appbar-actions" id="auth-area"></div>
+    </header>
+
+    <div id="demo-banner" class="demo-banner" hidden>
+      Demo modu — veriler bu tarayıcıda saklanıyor
+    </div>
+
+    <div id="page-head" class="page-head"></div>
+
+    <main id="view" class="view"></main>
+
+    <nav class="tabbar" id="main-nav">
+      <div class="tabbar-brand" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="26" fill="#1C2016"/><g transform="translate(11,11) scale(0.78)"><path d="M6,82 V18 H33 L50,44 L67,18 H94 V82 H71 V48 L50,72 L29,48 V82 Z" fill="#C6FF33"/></g></svg>
+        <span class="bt">Matcez</span>
+      </div>
+      <a href="#/" data-route="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg>
+        <span>Ana Sayfa</span>
+      </a>
+      <a href="#/takimim" data-route="squad">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3 12 4.8 15.5 3l4 3.2L17.4 9v12H6.6V9L4.5 6.2Z"/></svg>
+        <span>Takımım</span>
+      </a>
+      <a href="#/transferler" data-route="transfers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5h11"/><path d="m13.8 4.8 3.7 3.7-3.7 3.7"/><path d="M17.5 15.5h-11"/><path d="m10.2 11.8-3.7 3.7 3.7 3.7"/></svg>
+        <span>Transfer</span>
+      </a>
+      <a href="#/puanlar" data-route="points">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 20.5v-7"/><path d="M12 20.5v-13"/><path d="M18.5 20.5v-10"/></svg>
+        <span>Puanlar</span>
+      </a>
+      <a href="#/ligler" data-route="leagues">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4.5a4 4 0 0 1-8 0Z"/><path d="M8 5H5a3 3 0 0 0 3.2 3.5"/><path d="M16 5h3a3 3 0 0 1-3.2 3.5"/><path d="M12 12.5V16"/><path d="M9 20h6"/><path d="M10 16h4v4h-4z"/></svg>
+        <span>Ligler</span>
+      </a>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script>
+    // PWA: kurulum istemini yakala (Profil sayfasındaki "Telefona Ekle" düğmesi kullanır)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      window.__installPrompt = e;
+    });
+    // Service worker: yalnızca kendi sunucumuzda (artifact önizlemesinde sessizce atlanır)
+    if ('serviceWorker' in navigator && !location.hostname.includes('claude')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

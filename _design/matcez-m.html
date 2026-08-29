@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Matcez M — varyantlar</title>
+<style>
+  body { margin:0; background:#111; font-family:-apple-system,Inter,sans-serif; color:#eee; padding:16px 24px; }
+  h1 { font-size:20px; margin:0 0 14px; }
+  .row { display:flex; gap:20px; flex-wrap:wrap; }
+  .cell { text-align:center; }
+  .cell h2 { font-size:14px; font-weight:600; color:#aaa; margin:8px 0 6px; }
+  .tile { width:150px; height:150px; border-radius:32px; background:#000; display:grid; place-items:center; }
+  .tile.lime { background:#C6FF33; }
+  .smalls { display:flex; gap:14px; justify-content:center; align-items:center; margin-top:12px; }
+  .s48 { width:48px; height:48px; border-radius:11px; background:#000; display:grid; place-items:center; }
+  .s24 { width:24px; height:24px; border-radius:6px; background:#000; display:grid; place-items:center; }
+  svg { display:block; }
+</style>
+</head>
+<body>
+<h1>MATCEZ — kalın M işareti · #C6FF33 / #000000</h1>
+<div class="row" id="row"></div>
+
+<script>
+const VARIANTS = [
+  {
+    key:'E', name:'E — Kalıp M (basık, masif)',
+    path:'M6,82 V18 H33 L50,44 L67,18 H94 V82 H71 V48 L50,72 L29,48 V82 Z'
+  },
+  {
+    key:'F', name:'F — Kemer m (yuvarlak, dolgun)',
+    stroke:'M14,88 V44 Q14,23 32,23 Q50,23 50,44 V88 M50,52 Q50,23 68,23 Q86,23 86,44 V88', sw:17, round:true
+  },
+  {
+    key:'G', name:'G — Pah M (basık + köşe kesim)',
+    path:'M6,82 V32 L20,18 H33 L50,44 L67,18 H94 V68 L80,82 H71 V48 L50,72 L29,48 V82 Z'
+  },
+  {
+    key:'H', name:'H — Stencil M (parçalı)',
+    paths:['M7,82 V18 H27 V82 Z','M73,82 V18 H93 V82 Z','M31,18 L50,42 L69,18 V36 L50,60 L31,36 Z']
+  },
+];
+
+function msvg(v, size, color){
+  let inner;
+  if (v.paths) inner = v.paths.map(p=>`<path d="${p}" fill="${color}"/>`).join('');
+  else if (v.path) inner = `<path d="${v.path}" fill="${color}"/>`;
+  else inner = `<path d="${v.stroke}" fill="none" stroke="${color}" stroke-width="${v.sw}" ${v.round?'stroke-linecap="round" stroke-linejoin="round"':'stroke-miterlimit="3"'}/>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+}
+
+const row = document.getElementById('row');
+row.innerHTML = VARIANTS.map(v => `
+  <div class="cell">
+    <div class="tile">${msvg(v, 96, '#C6FF33')}</div>
+    <h2>${v.name}</h2>
+    <div class="smalls">
+      <div class="s48">${msvg(v, 32, '#C6FF33')}</div>
+      <div class="s24">${msvg(v, 16, '#C6FF33')}</div>
+      <div class="tile lime" style="width:48px;height:48px;border-radius:11px">${msvg(v, 32, '#000')}</div>
+    </div>
+  </div>`).join('');
+</script>
+</body>
+</html>

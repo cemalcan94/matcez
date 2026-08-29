@@ -1,0 +1,30 @@
+# Radyo Futbol canlı skor çekici — hafta sonu maç saatlerinde 10 dakikada bir çalışır.
+# Kurulum: repo GitHub'a itildikten sonra Settings > Secrets'a
+# SUPABASE_URL ve SUPABASE_SERVICE_KEY ekleyin.
+name: radyofutbol-skor
+
+on:
+  schedule:
+    # Cmt + Paz 14:00–22:50 KKTC (UTC+3 → 11:00–19:50 UTC), 10 dk arayla
+    - cron: '*/10 11-19 * * 6,0'
+    # Hafta içi akşam maçları için (Cum 18:00–22:50 KKTC)
+    - cron: '*/10 15-19 * * 5'
+  workflow_dispatch: {}   # elle tetikleme
+
+jobs:
+  skorlari-cek:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Bağımlılıklar
+        working-directory: scraper
+        run: npm install --omit=dev
+      - name: Skorları çek ve Supabase'e işle
+        working-directory: scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node radyofutbol.mjs --push

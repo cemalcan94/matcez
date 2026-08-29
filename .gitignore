@@ -1,0 +1,8 @@
+node_modules/
+scraper/out-*.json
+scraper/matcez-dist.html
+scraper/ktff-oyuncular*.json
+scraper/yildiz-sablonu.csv
+scraper/yildiz-dolu.csv
+*.log
+.DS_Store
