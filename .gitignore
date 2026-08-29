@@ -6,3 +6,4 @@ scraper/yildiz-sablonu.csv
 scraper/yildiz-dolu.csv
 *.log
 .DS_Store
+assets/promo/haftalik-odul.png

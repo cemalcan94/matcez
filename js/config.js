@@ -50,7 +50,7 @@ export const PRIZES = {
     highlight: 'JBL Charge 5',   // başlıkta lime renkle vurgulanacak kısım
     sponsor: 'Ödül sponsoru yakında açıklanacak',
     // Tam banner görseli (varsa kodla çizilen banner yerine bu gösterilir):
-    banner: '',
+    banner: 'assets/promo/haftalik-odul.webp',
   },
   season: {
     enabled: true,

@@ -35,6 +35,13 @@ const bodyHtml = readFileSync(join(root, 'index.html'), 'utf8')
   .replace(/<script type="module" src="js\/app.js"><\/script>/, '')
   .trim();
 
+// Ödül banner görselini tek dosyaya göm (artifact origin'de assets yok)
+try {
+  const promo = readFileSync(join(root, 'assets/promo/haftalik-odul.webp'));
+  js = js.replaceAll("'assets/promo/haftalik-odul.webp'",
+    `'data:image/webp;base64,${promo.toString('base64')}'`);
+} catch { /* görsel yoksa kodlu banner'a düşer */ }
+
 const html = `<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Matcez</title>

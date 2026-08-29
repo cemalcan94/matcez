@@ -253,11 +253,9 @@ tr.hl td { background: #F8FDE4; }
 .hero-cell .v.lime { color: var(--accent); }
 .hero-divider { width: 1px; background: #262B20; }
 
-/* Tam görselli ödül banner'ı */
+/* Tam görselli ödül banner'ı (görsel kendi yuvarlak köşelerini/şeffaflığını taşır) */
 .prize-banner-full {
-  display: block; border-radius: var(--radius); overflow: hidden;
-  margin-bottom: 8px; line-height: 0;
-  box-shadow: 0 2px 10px rgba(14,16,11,.10);
+  display: block; margin-bottom: 8px; line-height: 0;
 }
 .prize-banner-full img { width: 100%; height: auto; display: block; }
 .prize-banner-full:active { transform: scale(.99); }
