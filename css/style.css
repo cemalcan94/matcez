@@ -48,6 +48,22 @@ button { font-family: inherit; }
   display: flex; flex-direction: column;
 }
 .tabbar-brand { display: none; }
+
+/* Tab bar'ın arkasında içerik dağınık görünmesin: alttan yukarı zemin rengine geçiş */
+.app::after {
+  content: '';
+  position: fixed;
+  left: 50%; transform: translateX(-50%);
+  bottom: 0;
+  width: min(100vw, var(--appw));
+  height: calc(var(--tabbar-h) + var(--tabbar-gap) + 56px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top,
+    var(--bg) 0,
+    var(--bg) calc(100% - 56px),
+    rgba(250, 251, 245, 0) 100%);
+  pointer-events: none;
+  z-index: 58;
+}
 @media (min-width: 560px) {
   .app { box-shadow: 0 0 0 1px var(--line2), 0 24px 80px rgba(14,16,11,.08); }
 }
@@ -65,14 +81,15 @@ button { font-family: inherit; }
   font-family: var(--font-display);
   font-weight: 900; font-size: 17px; letter-spacing: -0.01em; color: var(--ink);
 }
-.appbar-actions { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.appbar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.appbar-actions .btn.sm { padding: 9px 18px; font-size: 14px; }
 .iconbtn {
-  width: 36px; height: 36px; border-radius: 50%;
+  width: 42px; height: 42px; border-radius: 50%;
   display: grid; place-items: center;
   background: transparent; border: none; cursor: pointer; color: var(--muted);
 }
 .iconbtn:hover { background: #EFF1E6; color: var(--ink); }
-.iconbtn svg { width: 19px; height: 19px; }
+.iconbtn svg { width: 23px; height: 23px; }
 
 .demo-banner {
   text-align: center; font-size: 10.5px; font-weight: 600;
@@ -339,7 +356,7 @@ tr.hl td { background: #F8FDE4; }
   border-radius: 18px;
   padding: 11px 14px;
   display: flex; align-items: center; gap: 10px;
-  z-index: 55;
+  z-index: 62;
   box-shadow: 0 10px 30px rgba(14,16,11,.10);
 }
 .actionbar .info { flex: 1; min-width: 0; font-size: 11.5px; color: var(--muted); line-height: 1.3; }
@@ -568,6 +585,7 @@ tr.hl td { background: #F8FDE4; }
     gap: 4px;
     box-shadow: none;
   }
+  .app::after { display: none; }
   .tabbar-brand {
     display: flex; align-items: center; gap: 10px;
     padding: 4px 12px 28px;
