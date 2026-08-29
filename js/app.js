@@ -133,7 +133,6 @@ async function main() {
   App.el = document.getElementById('view');
   App.store = await createStore();
 
-  document.getElementById('demo-banner').hidden = App.store.mode !== 'demo';
   renderAuthArea();
 
   window.addEventListener('hashchange', render);

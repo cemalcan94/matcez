@@ -53,7 +53,7 @@ export const PRIZES = {
     banner: 'assets/promo/haftalik-odul.webp',
   },
   season: {
-    enabled: true,
+    enabled: false,   // ana sayfadaki sezon ödülü satırı (istenince açılır)
     text: 'Sezon şampiyonuna sponsorumuzdan büyük ödül',
   },
 };

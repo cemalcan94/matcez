@@ -177,7 +177,6 @@ export async function renderHome(el) {
 
       <div class="card">
         <h2>KKTC Süper Lig</h2>
-        ${hasResults ? `
         <div class="table-wrap"><table>
           <tr><th style="width:32px">#</th><th>Takım</th><th class="num">O</th><th class="num">Av</th><th class="num">P</th></tr>
           ${tableRows.map((r, i) => `<tr>
@@ -189,8 +188,7 @@ export async function renderHome(el) {
           </tr>`).join('')}
         </table></div>
         ${table.length > 6 ? `<button class="btn sm block" style="margin-top:10px" id="btn-full-table">
-          ${showFullTable ? 'Daralt' : 'Tüm tabloyu göster'}</button>` : ''}` :
-        '<p class="muted small">Sonuç girildikçe puan tablosu burada oluşacak.</p>'}
+          ${showFullTable ? 'Daralt' : 'Tüm tabloyu göster'}</button>` : ''}
       </div>
 
       <div class="partners">
@@ -329,7 +327,8 @@ export function leagueTable(fixtures, teams) {
     else if (f.home_score < f.away_score) { a.g++; a.p += 3; h.m++; }
     else { h.b++; a.b++; h.p++; a.p++; }
   }
-  return [...rows.values()].sort((x, y) => y.p - x.p || y.av - x.av);
+  return [...rows.values()].sort((x, y) =>
+    y.p - x.p || y.av - x.av || x.team.name.localeCompare(y.team.name, 'tr'));
 }
 
 // ---------------- LİGLER ----------------
