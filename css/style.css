@@ -13,8 +13,8 @@
   --accent-ink: #131800;
   --accent-deep: #A9E01C;
   --danger: #C43E4B;
-  --pitch: #2f7d46;
-  --pitch-2: #35894e;
+  --pitch: #0DA351;
+  --pitch-2: #12AE59;
   --radius: 20px;
   --appw: 520px;
   --tabbar-h: 64px;
@@ -405,11 +405,17 @@ tr.hl td { background: #F8FDE4; }
 
 /* ---------- Saha ---------- */
 .pitch {
+  position: relative; overflow: hidden;
   background: repeating-linear-gradient(0deg, var(--pitch) 0 58px, var(--pitch-2) 58px 116px);
   border-radius: var(--radius);
-  padding: 30px 6px 20px;
+  padding: 34px 6px 20px;
 }
-.pitch-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 26px; }
+.pitch-lines {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.pitch-row { position: relative; display: flex; justify-content: center; gap: 6px; margin-bottom: 26px; }
 .pitch-row:last-child { margin-bottom: 6px; }
 .pslot {
   flex: 0 1 78px; min-width: 0;

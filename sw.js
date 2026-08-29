@@ -3,7 +3,7 @@
 // güncellemelerde eski JS + yeni HTML karışmasına yol açıyordu — bir daha olmayacak.)
 // Uygulama küçük olduğu için ağ-öncelikli yaklaşım hem hızlı hem her zaman tutarlıdır;
 // önbellek yalnızca çevrimdışı açılış içindir. API istekleri (Supabase) hiç dokunulmaz.
-const VERSION = 'matcez-v10';
+const VERSION = 'matcez-v11';
 const SHELL = [
   './',
   './index.html',

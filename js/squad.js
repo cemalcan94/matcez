@@ -14,20 +14,53 @@ async function loadCtx() {
   const now = new Date();
   const chips = store.user() ? await store.myChips() : [];
   const editableGw = gws.find(g => new Date(g.deadline) > now) ?? null;
-  // Bay tespiti: o haftanın fikstüründe yer almayan takımlar (15 takımlı ligde her hafta 1 takım)
+  // Bay tespiti + haftanın rakibi haritası (takımId -> {short, home})
   const gwFixtures = editableGw ? await store.fixtures(editableGw.id) : [];
+  const tm = new Map(teams.map(t => [t.id, t]));
   const byeSet = new Set();
+  const oppMap = new Map();
   if (gwFixtures.length) {
     const playing = new Set(gwFixtures.flatMap(f => [f.home_id, f.away_id]));
     for (const t of teams) if (!playing.has(t.id)) byeSet.add(t.id);
+    for (const f of gwFixtures) {
+      oppMap.set(f.home_id, { short: tm.get(f.away_id)?.short ?? '?', home: true });
+      oppMap.set(f.away_id, { short: tm.get(f.home_id)?.short ?? '?', home: false });
+    }
   }
   return {
-    store, gws, teams, players, chips, byeSet,
-    tm: new Map(teams.map(t => [t.id, t])),
+    store, gws, teams, players, chips, byeSet, oppMap,
+    tm,
     pm: new Map(players.map(p => [p.id, p])),
     editableGw,
     lockedGws: gws.filter(g => new Date(g.deadline) <= now),
   };
+}
+
+// Haftanın rakibi metni: "KAR (E)" / "KAR (D)" / "BAY"
+function oppText(ctx, teamId) {
+  if (ctx.byeSet.has(teamId)) return 'BAY';
+  const o = ctx.oppMap.get(teamId);
+  return o ? `${o.short} (${o.home ? 'E' : 'D'})` : '—';
+}
+
+// FPL tarzı perspektifli saha çizgileri (kale, ceza sahası, orta yuvarlak)
+function pitchLinesSvg() {
+  return `<svg class="pitch-lines" viewBox="0 0 400 560" preserveAspectRatio="none" aria-hidden="true">
+    <g stroke="rgba(255,255,255,.6)" stroke-width="2.5" vector-effect="non-scaling-stroke" fill="none">
+      <path d="M64,14 L336,14" vector-effect="non-scaling-stroke"/>
+      <path d="M64,14 L20,560" vector-effect="non-scaling-stroke"/>
+      <path d="M336,14 L380,560" vector-effect="non-scaling-stroke"/>
+      <path d="M126,14 L274,14 L288,112 L112,112 Z" vector-effect="non-scaling-stroke"/>
+      <path d="M163,14 L237,14 L243,54 L157,54 Z" vector-effect="non-scaling-stroke"/>
+      <path d="M160,112 A62 44 0 0 0 240,112" vector-effect="non-scaling-stroke"/>
+      <ellipse cx="200" cy="408" rx="80" ry="62" vector-effect="non-scaling-stroke"/>
+    </g>
+    <circle cx="200" cy="408" r="3.5" fill="rgba(255,255,255,.6)"/>
+    <rect x="166" y="0" width="68" height="14" fill="rgba(255,255,255,.22)"
+      stroke="rgba(255,255,255,.75)" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
+    <path d="M175,0 V14 M184,0 V14 M193,0 V14 M202,0 V14 M211,0 V14 M220,0 V14 M229,0 V14"
+      stroke="rgba(255,255,255,.3)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+  </svg>`;
 }
 
 // Kullanıcının tüm haftalardaki kadrolarını {gwId: [player_id]} olarak getirir
@@ -108,23 +141,32 @@ function draftCost(ctx, ids) {
 }
 
 // ---------------- saha çizimi ----------------
-function slotHtml(ctx, playerId, { pts = null, badgePts = false, cap = null, vice = null, size = 42, showBye = false } = {}) {
+// sub modu: 'team' = takım·fiyat, 'opp' = haftanın rakibi, 'opp-price' = rakip·fiyat
+function slotHtml(ctx, playerId, { pts = null, badgePts = false, cap = null, vice = null, size = 42, showBye = false, sub = 'team' } = {}) {
   const p = ctx.pm.get(playerId);
   if (!p) return '';
   const t = ctx.tm.get(p.teamId);
   const isCap = playerId === cap, isVice = playerId === vice;
   const isBye = showBye && ctx.byeSet.has(p.teamId);
   const surname = p.name.trim().split(/\s+/).slice(-1)[0];
+  let subHtml;
+  if (badgePts) {
+    subHtml = `<div class="psub pts">${pts ?? 0} p</div>`;
+  } else if (isBye) {
+    subHtml = `<div class="psub bye">BAY</div>`;
+  } else if (sub === 'opp') {
+    subHtml = `<div class="psub">${esc(oppText(ctx, p.teamId))}</div>`;
+  } else if (sub === 'opp-price') {
+    subHtml = `<div class="psub">${esc(oppText(ctx, p.teamId))} · ${p.price.toFixed(1)}</div>`;
+  } else {
+    subHtml = `<div class="psub">${esc(t?.short ?? '')} · ${p.price.toFixed(1)}</div>`;
+  }
   return `<div class="pslot" data-pid="${p.id}">
     ${isCap ? '<span class="cap-badge">C</span>' : isVice ? '<span class="cap-badge vice">V</span>' : ''}
     ${isBye ? '<span class="bye-badge">BAY</span>' : ''}
     <div class="pjersey">${jersey(t, size)}</div>
     <div class="plabel">${esc(surname)}</div>
-    ${badgePts
-      ? `<div class="psub pts">${pts ?? 0} p</div>`
-      : isBye
-        ? `<div class="psub bye">BAY · ${p.price.toFixed(1)}</div>`
-        : `<div class="psub">${esc(t?.short ?? '')} · ${p.price.toFixed(1)}</div>`}
+    ${subHtml}
   </div>`;
 }
 
@@ -143,7 +185,7 @@ function pitchHtml(ctx, st, opts = {}) {
     return `<div class="pitch-row">${ids.map(id =>
       slotHtml(ctx, id, { ...opts, cap: st.captainId, vice: st.viceId, pts: opts.ptsMap?.get(id) })).join('')}</div>`;
   }).join('');
-  return `<div class="pitch">${rows}</div>
+  return `<div class="pitch">${pitchLinesSvg()}${rows}</div>
     <div class="bench">
       <div class="bench-label">Yedekler — giriş sırasıyla</div>
       ${st.bench.map(id => slotHtml(ctx, id, { ...opts, cap: null, vice: null, pts: opts.ptsMap?.get(id) })).join('')}
@@ -203,8 +245,9 @@ export async function renderPickTeam(el) {
       ${chipStripHtml()}
       ${swapSource ? `<p class="small" style="margin-bottom:8px;font-weight:700">
         ${esc(pm.get(swapSource)?.name)} için değişim: başka bir oyuncuya dokun (iptal: aynı oyuncu)</p>` : ''}
-      ${pitchHtml(ctx, st, { showBye: true })}
-      <p class="muted small" style="margin-top:10px">Oyuncuya dokunarak kaptan seç veya oyuncu değiştir.
+      ${pitchHtml(ctx, st, { showBye: true, sub: 'opp' })}
+      <p class="muted small" style="margin-top:10px">Kartların altında bu haftaki rakip yazar (E: evinde, D: deplasmanda).
+      Oyuncuya dokunarak kaptan seç veya oyuncu değiştir.
       Kaptan çift puan alır; oynamazsa vekil devreye girer. Kozlar hakkında bilgi için Kurallar sayfasına bak.</p>`;
 
     el.querySelectorAll('[data-chip]').forEach(elm => elm.onclick = async () => {
@@ -343,11 +386,11 @@ export async function renderTransfers(el) {
         .sort((a, b) => pm.get(b).price - pm.get(a).price);
       const empties = RULES.slots[pos] - ids.length;
       return `<div class="pitch-row">
-        ${ids.map(id => slotHtml(ctx, id, { size: 40, showBye: true })).join('')}
+        ${ids.map(id => slotHtml(ctx, id, { size: 40, showBye: true, sub: 'opp-price' })).join('')}
         ${Array.from({ length: Math.max(0, empties) }, (_, i) => emptySlotHtml(pos, i)).join('')}
       </div>`;
     }).join('');
-    return `<div class="pitch">${rows}</div>`;
+    return `<div class="pitch">${pitchLinesSvg()}${rows}</div>`;
   }
 
   function draw() {
@@ -532,7 +575,7 @@ export async function renderTransferSelect(el) {
               <span class="jr" style="width:26px;height:26px">${jersey(t, 26)}</span>
               <div class="grow">
                 <div class="pname">${esc(p.name)}${ctx.byeSet.has(p.teamId) ? ' <span class="pill bay">BAY</span>' : ''}</div>
-                <div class="muted small">${esc(t?.name ?? '')}${teamFull ? ' · takım limiti' : noBudget ? ' · bütçe yetersiz' : ''}</div>
+                <div class="muted small">${esc(t?.name ?? '')}${ctx.byeSet.has(p.teamId) ? '' : ` · Rakip: <b>${esc(oppText(ctx, p.teamId))}</b>`}${teamFull ? ' · takım limiti' : noBudget ? ' · bütçe yetersiz' : ''}</div>
               </div>
               <span class="num" style="min-width:42px"><b>${p.price.toFixed(1)}</b><span class="muted small">M</span></span>
               <button class="iconbtn" data-profile="${p.id}" title="Profil" style="border:1px solid var(--line)">
