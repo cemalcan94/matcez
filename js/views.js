@@ -5,11 +5,27 @@ import { playerPointsForGW, EVENT_LABELS } from './points.js';
 
 function teamMap(teams) { return new Map(teams.map(t => [t.id, t])); }
 
-function countdown(deadline) {
+function countdownParts(deadline) {
   const ms = new Date(deadline) - new Date();
-  if (ms <= 0) return 'kapandı';
-  const d = Math.floor(ms / 86400000), h = Math.floor(ms % 86400000 / 3600000), m = Math.floor(ms % 3600000 / 60000);
-  return d > 0 ? `${d}g ${h}s` : `${h}s ${m}dk`;
+  if (ms <= 0) return null;
+  const d = Math.floor(ms / 86400000), h = Math.floor(ms % 86400000 / 3600000);
+  const m = Math.floor(ms % 3600000 / 60000), s = Math.floor(ms % 60000 / 1000);
+  return d > 0 ? [[d, 'gün'], [h, 'saat'], [m, 'dk']] : [[h, 'saat'], [m, 'dk'], [s, 'sn']];
+}
+
+function heroCountHTML(deadline) {
+  const parts = countdownParts(deadline);
+  if (!parts) return '<div class="hc-closed">Kapandı</div>';
+  return parts.map(([n, u]) =>
+    `<div class="hc-seg"><b>${String(n).padStart(2, '0')}</b><span>${u}</span></div>`
+  ).join('<div class="hc-sep">:</div>');
+}
+
+function heroWhen(deadline) {
+  const dt = new Date(deadline);
+  const day = dt.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' });
+  const time = dt.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+  return `${day} · ${time}`;
 }
 
 export function fixtureRow(f, tm) {
@@ -63,9 +79,19 @@ export async function renderHome(el) {
 
     el.innerHTML = `
       <div class="hero-lime">
-        <div class="k">${editableGw ? esc(editableGw.name) + ' · Son Teslim' : 'Sezon'}</div>
-        <div class="big">${editableGw ? countdown(editableGw.deadline) : '—'}</div>
-        <div class="sub">${editableGw ? fmtDate(editableGw.deadline) : 'Yeni hafta açıldığında burada görünür'}</div>
+        <svg class="hero-mark" viewBox="0 12 100 76" aria-hidden="true">
+          <path d="M6,82 V18 H33 L50,44 L67,18 H94 V82 H71 V48 L50,72 L29,48 V82 Z"/>
+        </svg>
+        ${editableGw ? `
+        <div class="hero-top">
+          <span class="hero-chip">${esc(editableGw.name)}</span>
+          <span class="hero-when">Son Teslim</span>
+        </div>
+        <div class="hero-count" id="hero-count">${heroCountHTML(editableGw.deadline)}</div>
+        <div class="hero-sub">${heroWhen(editableGw.deadline)}</div>` : `
+        <div class="hero-top"><span class="hero-chip">Sezon</span></div>
+        <div class="hero-count"><div class="hc-closed">Yakında</div></div>
+        <div class="hero-sub">Yeni hafta açıldığında geri sayım burada başlar</div>`}
         <div class="stats">
           <div><span class="sk">Toplam Puan</span><b>${myRow?.total_points ?? 0}</b></div>
           <div><span class="sk">Sıralama</span><b>${myRank ? '#' + myRank : '—'}</b></div>
@@ -210,6 +236,13 @@ export async function renderHome(el) {
     });
   }
   await draw();
+
+  // Geri sayımı canlı işlet; sayfadan çıkılınca kendini temizler
+  const tick = setInterval(() => {
+    if (!el.isConnected) { clearInterval(tick); return; }
+    const c = el.querySelector('#hero-count');
+    if (c && editableGw) c.innerHTML = heroCountHTML(editableGw.deadline);
+  }, 1000);
 }
 
 // ---------------- OYUNCU PROFİLİ ----------------

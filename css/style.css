@@ -207,21 +207,51 @@ tr.hl td { background: #F8FDE4; }
 /* ---------- Güç blokları ---------- */
 /* Lime blok: ana sayfa kahramanı (Chime tarzı marka anı) */
 .hero-lime {
+  position: relative; overflow: hidden;
   background: var(--accent); color: var(--accent-ink);
   border-radius: var(--radius);
-  padding: 22px 20px 20px;
+  padding: 20px 20px 18px;
   margin-bottom: 14px;
 }
-.hero-lime .k {
-  font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(19,24,0,.55);
+.hero-lime > * { position: relative; }
+.hero-mark {
+  position: absolute; right: -30px; top: -6px; width: 175px; height: auto;
+  transform: rotate(-8deg);
 }
-.hero-lime .big {
+.hero-mark path { fill: rgba(19,24,0,.05); }
+.hero-top { display: flex; align-items: center; justify-content: space-between; }
+.hero-chip {
+  background: var(--ink); color: var(--accent);
   font-family: var(--font-display);
-  font-size: 46px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.02;
-  margin-top: 6px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 6px 12px 5px; border-radius: 999px;
 }
-.hero-lime .sub { font-size: 13px; font-weight: 600; color: rgba(19,24,0,.6); margin-top: 4px; }
+.hero-when {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase;
+  color: rgba(19,24,0,.5);
+}
+.hero-count { display: flex; align-items: flex-start; gap: 12px; margin-top: 16px; }
+.hc-seg b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 46px; font-weight: 900; letter-spacing: -0.02em; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.hc-seg span {
+  display: block; margin-top: 5px;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase;
+  color: rgba(19,24,0,.5);
+}
+.hc-sep {
+  font-family: var(--font-display);
+  font-size: 30px; font-weight: 900; line-height: 1; padding-top: 7px;
+  color: rgba(19,24,0,.25);
+}
+.hc-closed {
+  font-family: var(--font-display);
+  font-size: 40px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.05;
+}
+.hero-sub { font-size: 12.5px; font-weight: 600; color: rgba(19,24,0,.6); margin-top: 9px; }
 .hero-lime .stats {
   display: flex; margin-top: 18px; padding-top: 14px;
   border-top: 1px solid rgba(14,16,11,.14);
