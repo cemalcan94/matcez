@@ -56,10 +56,10 @@ button { font-family: inherit; }
   left: 50%; transform: translateX(-50%);
   bottom: 0;
   width: min(100vw, var(--appw));
-  height: calc(var(--tabbar-h) + var(--tabbar-gap) + 16px + env(safe-area-inset-bottom, 0px));
+  height: calc(var(--tabbar-h) + var(--tabbar-gap) + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(to top,
-    rgba(250, 251, 245, .88) 0,
-    rgba(250, 251, 245, .55) 55%,
+    rgba(250, 251, 245, .6) 0,
+    rgba(250, 251, 245, .3) 55%,
     rgba(250, 251, 245, 0) 100%);
   pointer-events: none;
   z-index: 58;
@@ -79,7 +79,7 @@ button { font-family: inherit; }
 .appbar-brand svg { display: block; }
 .brand-text {
   font-family: var(--font-display);
-  font-weight: 900; font-size: 17px; letter-spacing: -0.01em; color: var(--ink);
+  font-weight: 900; font-size: 21px; letter-spacing: -0.01em; color: var(--ink);
 }
 .appbar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
 .appbar-actions .btn.sm { padding: 9px 18px; font-size: 14px; }
@@ -405,11 +405,12 @@ tr.hl td { background: #F8FDE4; }
 
 /* ---------- Saha ---------- */
 .pitch {
-  background: repeating-linear-gradient(0deg, var(--pitch) 0 52px, var(--pitch-2) 52px 104px);
+  background: repeating-linear-gradient(0deg, var(--pitch) 0 58px, var(--pitch-2) 58px 116px);
   border-radius: var(--radius);
-  padding: 18px 6px 10px;
+  padding: 30px 6px 20px;
 }
-.pitch-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
+.pitch-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 26px; }
+.pitch-row:last-child { margin-bottom: 6px; }
 .pslot {
   flex: 0 1 78px; min-width: 0;
   text-align: center; cursor: pointer;
