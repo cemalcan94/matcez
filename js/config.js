@@ -47,10 +47,10 @@ export const PRIZES = {
     enabled: true,
     eyebrow: 'Haftalık Ödül',
     title: 'Haftanın birincisi ol,\nJBL Charge 5 kazan',
-    sponsor: 'Ödül sponsoru: yakında açıklanacak',
-    image: '',
-    // Tam banner görseli (varsa metin düzeni yerine bu gösterilir):
-    banner: 'assets/promo/haftalik-odul.png',
+    highlight: 'JBL Charge 5',   // başlıkta lime renkle vurgulanacak kısım
+    sponsor: 'Ödül sponsoru yakında açıklanacak',
+    // Tam banner görseli (varsa kodla çizilen banner yerine bu gösterilir):
+    banner: '',
   },
   season: {
     enabled: true,

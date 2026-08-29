@@ -1,7 +1,7 @@
 // Matcez service worker — uygulama kabuğunu önbelleğe alır (çevrimdışı açılış + hızlı yükleme).
 // Strateji: navigasyon ve kabuk dosyaları için "stale-while-revalidate"
 // (önce önbellekten göster, arka planda güncelle) — API istekleri (Supabase) hiç dokunulmaz.
-const VERSION = 'matcez-v3';
+const VERSION = 'matcez-v4';
 const SHELL = [
   './',
   './index.html',

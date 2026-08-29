@@ -84,19 +84,52 @@ export async function renderHome(el) {
       </a>` : ''}
       <a class="prize-banner" id="prize-fallback" href="#/kurallar"
          ${PRIZES.weekly.banner ? 'style="display:none"' : ''}>
-        <div class="pb-txt">
-          <div class="pb-eyebrow">${esc(PRIZES.weekly.eyebrow)}</div>
-          <div class="pb-title">${esc(PRIZES.weekly.title).replace(/\n/g, '<br>')}</div>
-          <div class="pb-sponsor">${esc(PRIZES.weekly.sponsor)}</div>
+        <div class="pb-art" aria-hidden="true">
+          <svg viewBox="0 0 300 220" preserveAspectRatio="xMaxYMid slice">
+            <defs>
+              <pattern id="pbDots" width="10" height="10" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1.6" fill="rgba(255,255,255,.10)"/>
+              </pattern>
+              <pattern id="pbMesh" width="6" height="6" patternUnits="userSpaceOnUse">
+                <circle cx="1.5" cy="1.5" r="1" fill="rgba(255,255,255,.07)"/>
+              </pattern>
+            </defs>
+            <!-- köşegen lime şekiller -->
+            <polygon points="300,220 232,220 300,84" fill="#C6FF33"/>
+            <polygon points="300,66 262,66 300,-10" fill="#C6FF33" opacity=".55"/>
+            <path d="M78 10 L228 10 L192 82 L118 82 Z" fill="url(#pbDots)"/>
+            <path d="M180 220 L268 132" stroke="#2A2E20" stroke-width="2"/>
+            <path d="M60 0 L110 0 L84 52" stroke="#2A2E20" stroke-width="2" fill="none"/>
+            <!-- hoparlör -->
+            <g transform="rotate(-14 165 118)">
+              <rect x="58" y="76" width="214" height="86" rx="43" fill="#15170F"/>
+              <rect x="58" y="76" width="214" height="86" rx="43" fill="url(#pbMesh)"/>
+              <rect x="58" y="76" width="214" height="86" rx="43" fill="none" stroke="#000" stroke-width="2.5"/>
+              <circle cx="101" cy="119" r="41" fill="#0C0E08"/>
+              <circle cx="101" cy="119" r="30" fill="none" stroke="#23261B" stroke-width="5"/>
+              <circle cx="101" cy="119" r="12" fill="#1B1E14"/>
+              <ellipse cx="247" cy="119" rx="24" ry="41" fill="#0C0E08"/>
+              <ellipse cx="247" cy="119" rx="14" ry="28" fill="none" stroke="#23261B" stroke-width="4"/>
+              <rect x="150" y="84" width="64" height="10" rx="5" fill="#1E2117"/>
+              <rect x="168" y="140" width="4" height="14" rx="2" fill="#C6FF33" opacity=".85"/>
+              <path d="M84 160 A120 120 0 0 0 240 156" fill="none" stroke="#C6FF33" stroke-width="2.5" opacity=".35"/>
+            </g>
+          </svg>
         </div>
-        <div class="pb-img">
-          ${PRIZES.weekly.image ? `<img src="${esc(PRIZES.weekly.image)}" alt="Ödül">` : `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3.5" y="8.5" width="17" height="12" rx="1.5"/>
-            <path d="M3.5 12.5h17"/><path d="M12 8.5v12"/>
-            <path d="M12 8.5c-4.5 0-5.5-2-4.7-3.6C8.1 3.3 11 4.3 12 8.5Z"/>
-            <path d="M12 8.5c4.5 0 5.5-2 4.7-3.6C15.9 3.3 13 4.3 12 8.5Z"/>
-          </svg>`}
+        <div class="pb-txt">
+          <div class="pb-eyebrow">
+            <span class="pb-gift">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8.5" width="17" height="12" rx="1.5"/><path d="M3.5 12.5h17"/><path d="M12 8.5v12"/><path d="M12 8.5c-4.5 0-5.5-2-4.7-3.6C8.1 3.3 11 4.3 12 8.5Z"/><path d="M12 8.5c4.5 0 5.5-2 4.7-3.6C15.9 3.3 13 4.3 12 8.5Z"/></svg>
+            </span>
+            ${esc(PRIZES.weekly.eyebrow)}
+          </div>
+          <div class="pb-title">${(() => {
+            const t = esc(PRIZES.weekly.title).replace(/\n/g, '<br>');
+            const h = esc(PRIZES.weekly.highlight ?? '');
+            return h ? t.replace(h, `<em>${h}</em>`) : t;
+          })()}</div>
+          <div class="pb-dash"></div>
+          <div class="pb-sponsor">${esc(PRIZES.weekly.sponsor)}</div>
         </div>
       </a>
       ${PRIZES.season.enabled ? `<div class="prize-season">${esc(PRIZES.season.text)}</div>` : ''}` : ''}
