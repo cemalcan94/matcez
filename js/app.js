@@ -140,4 +140,16 @@ async function main() {
   render();
 }
 
-main();
+main().catch((err) => {
+  // Uygulama açılışta çökerse asla boş ekran bırakma
+  console.error(err);
+  const el = document.getElementById('view');
+  if (el) {
+    el.innerHTML = `<div class="card" style="text-align:center;padding:32px 20px">
+      <h3 style="font-size:16px">Bir şeyler ters gitti</h3>
+      <p class="muted small" style="margin:8px 0 16px">Sayfa yüklenirken bir sorun oluştu.
+      Yenilemek genellikle çözer.</p>
+      <button class="btn primary block" onclick="location.reload()">Yenile</button>
+    </div>`;
+  }
+});
