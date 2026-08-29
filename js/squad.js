@@ -43,19 +43,20 @@ function oppText(ctx, teamId) {
   return o ? `${o.short} (${o.home ? 'E' : 'D'})` : '—';
 }
 
-// FPL tarzı perspektifli saha çizgileri (kale, ceza sahası, orta yuvarlak)
+// Saha çizgileri — düz (kuşbakışı) görünüm: kale, ceza sahası, orta yuvarlak
 function pitchLinesSvg() {
   return `<svg class="pitch-lines" viewBox="0 0 400 560" preserveAspectRatio="none" aria-hidden="true">
-    <g stroke="rgba(255,255,255,.6)" stroke-width="2.5" vector-effect="non-scaling-stroke" fill="none">
-      <path d="M64,14 L336,14" vector-effect="non-scaling-stroke"/>
-      <path d="M64,14 L20,560" vector-effect="non-scaling-stroke"/>
-      <path d="M336,14 L380,560" vector-effect="non-scaling-stroke"/>
-      <path d="M126,14 L274,14 L288,112 L112,112 Z" vector-effect="non-scaling-stroke"/>
-      <path d="M163,14 L237,14 L243,54 L157,54 Z" vector-effect="non-scaling-stroke"/>
-      <path d="M160,112 A62 44 0 0 0 240,112" vector-effect="non-scaling-stroke"/>
-      <ellipse cx="200" cy="408" rx="80" ry="62" vector-effect="non-scaling-stroke"/>
+    <g stroke="rgba(255,255,255,.55)" stroke-width="2.5" fill="none">
+      <path d="M14,14 H386" vector-effect="non-scaling-stroke"/>
+      <path d="M14,14 V560" vector-effect="non-scaling-stroke"/>
+      <path d="M386,14 V560" vector-effect="non-scaling-stroke"/>
+      <path d="M110,14 V112 H290 V14" vector-effect="non-scaling-stroke"/>
+      <path d="M160,14 V52 H240 V14" vector-effect="non-scaling-stroke"/>
+      <path d="M162,112 A58 42 0 0 0 238,112" vector-effect="non-scaling-stroke"/>
+      <path d="M14,408 H128 M272,408 H386" vector-effect="non-scaling-stroke"/>
+      <ellipse cx="200" cy="408" rx="72" ry="60" vector-effect="non-scaling-stroke"/>
     </g>
-    <circle cx="200" cy="408" r="3.5" fill="rgba(255,255,255,.6)"/>
+    <circle cx="200" cy="408" r="3.5" fill="rgba(255,255,255,.55)"/>
     <rect x="166" y="0" width="68" height="14" fill="rgba(255,255,255,.22)"
       stroke="rgba(255,255,255,.75)" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
     <path d="M175,0 V14 M184,0 V14 M193,0 V14 M202,0 V14 M211,0 V14 M220,0 V14 M229,0 V14"
